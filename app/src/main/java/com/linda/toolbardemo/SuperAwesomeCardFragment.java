@@ -16,9 +16,6 @@
 
 package com.linda.toolbardemo;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -36,7 +33,7 @@ public class SuperAwesomeCardFragment extends Fragment {
 	private static final String TAG = "SuperAwesomeCardFragmen";
 	private static final String ARG_POSITION = "position";
 	private int position;
-	private static final int[] drawables = { R.mipmap.f, R.mipmap.s, R.mipmap.t, R.mipmap.fo,
+	private static final int[] drawables = { R.mipmap.f, R.mipmap.s, R.mipmap.f, R.mipmap.fo,
 			R.mipmap.fi, R.mipmap.fi, R.mipmap.fi, R.mipmap.fi };
 
 	public static SuperAwesomeCardFragment newInstance(int position) {
