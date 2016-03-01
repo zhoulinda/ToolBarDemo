@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:fitsSystemWindows="true"
+            app:theme="@style/ThemeOverlay.AppCompat.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
         </android.support.v7.widget.Toolbar>
@@ -42,9 +43,10 @@
     </LinearLayout>
 
     <android.support.design.widget.NavigationView
-        android:id="@+id/id_nv_menu"
+        android:id="@+id/nv_menu"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:itemBackground="@drawable/item_bg"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/banner"

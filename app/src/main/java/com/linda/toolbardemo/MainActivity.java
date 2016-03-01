@@ -1,19 +1,24 @@
 package com.linda.toolbardemo;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.ShareActionProvider;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -37,18 +42,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initView();
-
     }
 
     private void initView(){
 //        StatusBarCompat.compat(this,R.color.colorPrimary);
         toolbar = (Toolbar) findViewById(R.id.mToolbar);
         // App Logo
-        toolbar.setLogo(R.mipmap.ic_launcher);
+//        toolbar.setLogo(R.mipmap.ic_launcher);
         // Title
-        toolbar.setTitle("My Title");
+//        toolbar.setTitle("My Title");
         // Sub Title
-        toolbar.setSubtitle("Sub title");
+//        toolbar.setSubtitle("Sub title");
 
         setSupportActionBar(toolbar);
 
@@ -58,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 //        toolbar.setNavigationIcon(R.mipmap.ab_android);
 
         // Menu item click 的监听事件一样要设定在 setSupportActionBar() 之后才有作用
-        toolbar.setOnMenuItemClickListener(onMenuItemClick);
+//        toolbar.setOnMenuItemClickListener(onMenuItemClick);
 
         ActionBar bar = getSupportActionBar();
         if (bar != null){
@@ -69,6 +73,16 @@ public class MainActivity extends AppCompatActivity {
                 R.string.drawer_close);
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+        NavigationView navigationView = (NavigationView)findViewById(R.id.nv_menu);
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                item.setChecked(true);
+                mDrawerLayout.closeDrawers();
+                return false;
+            }
+        });
 
         mPagerSlidingTabStrip = (PagerSlidingTabStrip)findViewById(R.id.tabs);
         initTabsValue();//配置PagerSlidingTabStrip
@@ -176,31 +190,6 @@ public class MainActivity extends AppCompatActivity {
         return Color.rgb(red, green, blue);
     }
 
-    private Toolbar.OnMenuItemClickListener onMenuItemClick = new Toolbar.OnMenuItemClickListener() {
-
-        @Override
-        public boolean onMenuItemClick(MenuItem menuItem) {
-            String msg = "";
-            switch (menuItem.getItemId()) {
-                case R.id.action_edit:
-                    msg += "Click edit";
-                    break;
-                case R.id.action_share:
-                    msg += "Click share";
-                    break;
-                case R.id.action_settings:
-                    msg += "Click setting";
-                    break;
-            }
-
-            if(!msg.equals("")) {
-                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-            }
-
-            return true;
-        }
-    };
-
     /* ***************FragmentPagerAdapter***************** */
     public class MyPagerAdapter extends FragmentPagerAdapter {
 
@@ -224,7 +213,6 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             return SuperAwesomeCardFragment.newInstance(position);
         }
-
     }
 
     @Override
@@ -232,6 +220,51 @@ public class MainActivity extends AppCompatActivity {
 
         getMenuInflater().inflate(R.menu.menu_main,menu);
 
-        return true;
+        /* ShareActionProvider配置 */
+        ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menu.findItem(R.id.action_share));
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/*");
+        if (mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(intent);
+        }
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_edit));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Toast.makeText(MainActivity.this, query, Toast.LENGTH_LONG).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+            String msg = "";
+            switch (item.getItemId()) {
+//                case R.id.action_edit:
+//                    msg += "Click edit";
+//                    break;
+                case R.id.action_share:
+                    msg += "Click share";
+                    break;
+                case R.id.action_settings:
+                    msg += "Click setting";
+                    break;
+            }
+
+            if(!msg.equals("")) {
+                Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+            }
+        return super.onOptionsItemSelected(item);
     }
 }
